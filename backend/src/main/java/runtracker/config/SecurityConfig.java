@@ -1,5 +1,6 @@
 package runtracker.config;
 
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import runtracker.filter.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +21,8 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
-      .csrf(csrf -> csrf.disable())
+      .csrf(AbstractHttpConfigurer::disable)
+      .cors(Customizer.withDefaults())
       .authorizeHttpRequests(authz -> authz
         .requestMatchers("/auth/**").permitAll()
         .anyRequest().authenticated()

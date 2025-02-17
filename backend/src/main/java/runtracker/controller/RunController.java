@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/runs")
-@PreAuthorize("isAuthenticated()") // Ensures only authenticated users can access these endpoints
+ // Ensures only authenticated users can access these endpoints
 public class RunController {
   private final RunRepository runRepository;
 
