@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  backend:
+    image: backend  # Change to your actual image name
+    build: .
+    container_name: runtracker_backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/runtracker
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      cors.allowedOrigins: https://yourfrontend.com
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8
+    container_name: runtracker_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: runtracker
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
