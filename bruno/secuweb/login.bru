@@ -1,0 +1,18 @@
+meta {
+  name: login
+  type: http
+  seq: 4
+}
+
+post {
+  url: 0.0.0.0:8080/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "john_doe",
+    "password": "secretpassword"
+  }
+}
