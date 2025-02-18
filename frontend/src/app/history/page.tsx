@@ -1,40 +1,40 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { fetchRuns } from "../api/runs"
+import { useState, useEffect } from "react";
+import { fetchRuns } from "../api/runs";
 
 interface Run {
-  _id: string
-  time: number
-  distance: number
-  date: string
+  _id: string;
+  time: number;
+  distance: number;
+  date: string;
 }
 
 export default function History() {
-  const [runs, setRuns] = useState<Run[]>([])
-  const [error, setError] = useState("")
+  const [runs, setRuns] = useState<Run[]>([]);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const getRuns = async () => {
-      const token = localStorage.getItem("token")
+      const token = localStorage.getItem("token");
       if (!token) {
-        setError("You must be logged in to view run history")
-        return
+        setError("You must be logged in to view run history");
+        return;
       }
       try {
-        const data = await fetchRuns(token)
-        setRuns(data)
+        const data = await fetchRuns(token);
+        setRuns(data as unknown as Run[]);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to fetch runs")
-        console.error("Error details:", err)
+        setError(err instanceof Error ? err.message : "Failed to fetch runs");
+        console.error("Error details:", err);
       }
-    }
+    };
 
-    getRuns()
-  }, [])
+    getRuns();
+  }, []);
 
   if (error) {
-    return <p className="text-red-500">{error}</p>
+    return <p className="text-red-500">{error}</p>;
   }
 
   return (
@@ -52,15 +52,18 @@ export default function History() {
         <tbody>
           {runs.map((run) => (
             <tr key={run._id}>
-              <td className="border p-2">{new Date(run.date).toLocaleDateString()}</td>
+              <td className="border p-2">
+                {new Date(run.date).toLocaleDateString()}
+              </td>
               <td className="border p-2">{run.time.toFixed(2)}</td>
               <td className="border p-2">{run.distance.toFixed(2)}</td>
-              <td className="border p-2">{(run.time / run.distance).toFixed(2)}</td>
+              <td className="border p-2">
+                {(run.time / run.distance).toFixed(2)}
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
-  )
+  );
 }
-
