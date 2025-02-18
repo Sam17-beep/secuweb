@@ -21,10 +21,11 @@ export default function NewRun() {
       return;
     }
     try {
-      await addRun(Number.parseFloat(time), Number.parseFloat(distance), token);
+      await addRun(time, distance, token);
       router.push("/history");
-    } catch {
-      setError("Failed to add new run");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to add new run");
+      console.error("Error details:", err);
     }
   };
 

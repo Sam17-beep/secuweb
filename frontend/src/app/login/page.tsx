@@ -1,28 +1,28 @@
-"use client";
+"use client"
 
-import type React from "react";
+import type React from "react"
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { login } from "../api/auth";
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { login } from "../api/auth"
 
 export default function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const router = useRouter();
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
+    e.preventDefault()
+    setError("")
     try {
-      const token = await login(username, password);
-      localStorage.setItem("token", token);
-      router.push("/history");
-    } catch {
-      setError("Login failed. Please check your credentials.");
+      const token = await login(username, password)
+      localStorage.setItem("token", token)
+      router.push("/history")
+    } catch (err) {
+      setError("Login failed. Please check your credentials.")
     }
-  };
+  }
 
   return (
     <form onSubmit={handleSubmit} className="max-w-sm mx-auto">
@@ -54,12 +54,10 @@ export default function Login() {
           required
         />
       </div>
-      <button
-        type="submit"
-        className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-      >
+      <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
         Login
       </button>
     </form>
-  );
+  )
 }
+

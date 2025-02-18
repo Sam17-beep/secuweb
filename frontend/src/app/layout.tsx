@@ -1,20 +1,21 @@
-import type React from "react";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import Link from "next/link";
+import type React from "react"
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
+import "./globals.css"
+import Link from "next/link"
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Run Journal",
   description: "Track your runs and progress",
-};
+    generator: 'v0.dev'
+}
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <html lang="en">
@@ -41,5 +42,9 @@ export default function RootLayout({
         <main className="container mx-auto mt-8 px-4">{children}</main>
       </body>
     </html>
-  );
+  )
 }
+
+
+
+import './globals.css'

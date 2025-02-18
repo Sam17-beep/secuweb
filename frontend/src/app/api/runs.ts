@@ -1,30 +1,56 @@
-const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+"use server";
+import dbConnect from "../lib/mongoose";
+import Run from "../models/Run";
+import jwt from "jsonwebtoken";
 
-export async function addRun(timeMin: number, distance: number, token: string) {
-  const response = await fetch(`${API_URL}/runs`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({ timeMin, lengthKm: distance, date: "2025-02-17" }),
-  });
+const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
-  if (!response.ok) {
+export async function addRun(time: string, distance: string, token: string) {
+  await dbConnect();
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET) as { userId: string };
+    const userId = decoded.userId;
+
+    const run = new Run({
+      userId,
+      time,
+      distance,
+    });
+
+    await run.save();
+    const serializedRun = {
+      ...run.toObject(),
+      userId: run.userId.toString(), // Ensure _id is a string
+      _id: run._id.toString(), // Ensure _id is a string
+    };
+
+    return serializedRun;
+  } catch (error) {
+    console.error("Error in addRun:", error);
     throw new Error("Failed to add new run");
   }
 }
 
-export async function getRuns(token: string) {
-  const response = await fetch(`${API_URL}/runs`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export async function fetchRuns(token: string) {
+  await dbConnect();
 
-  if (!response.ok) {
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET) as { userId: string };
+    const userId = decoded.userId;
+
+    const runs = await Run.find({ userId }).sort({ date: -1 });
+
+    // Convert _id to string to make it serializable
+    const serializedRuns = runs.map((run) => ({
+      ...run.toObject(),
+      userId: run.userId.toString(), // Ensure _id is a string
+      _id: run._id.toString(), // Ensure _id is a string
+    }));
+
+    return serializedRuns;
+  } catch (error) {
+    console.error("Error in fetchRuns:", error);
     throw new Error("Failed to fetch runs");
   }
-
-  return response.json();
 }
