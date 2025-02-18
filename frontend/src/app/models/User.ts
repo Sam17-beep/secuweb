@@ -23,5 +23,4 @@ export interface UserDocument extends mongoose.Document {
   validatePassword(password: string): Promise<boolean>;
 }
 
-export default mongoose.models.User ||
-  mongoose.model<UserDocument>("User", userSchema);
+export default mongoose.model<UserDocument>("User", userSchema);
