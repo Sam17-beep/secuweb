@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { fetchRuns } from "../api/runs";
 
 interface Run {
@@ -13,12 +14,13 @@ interface Run {
 export default function History() {
   const [runs, setRuns] = useState<Run[]>([]);
   const [error, setError] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     const getRuns = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
-        setError("You must be logged in to view run history");
+        router.push("/login");
         return;
       }
       try {
