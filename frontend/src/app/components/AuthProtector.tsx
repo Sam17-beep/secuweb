@@ -18,7 +18,7 @@ export default function AuthProtector({ children }: AuthProtectorProps) {
     console.log("Token found:", token);
     if (!token) {
       console.log("No token found, redirecting to login");
-      router.push("/login");
+      router.push("/");
     } else {
       console.log("Token found, user is authenticated");
       setIsAuthenticated(true);

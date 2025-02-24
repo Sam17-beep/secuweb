@@ -17,7 +17,7 @@ export default function Signup() {
     setError("");
     try {
       await signup(username, password);
-      router.push("/login");
+      router.push("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Signup failed");
     }

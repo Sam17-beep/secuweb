@@ -19,7 +19,7 @@ export default function Navigation() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
-    router.push("/login");
+    router.push("/");
   };
 
   if (isLoading) {
@@ -39,7 +39,7 @@ export default function Navigation() {
         {!isAuthenticated ? (
           <>
             <li>
-              <Link href="/login">Login</Link>
+              <Link href="/">Login</Link>
             </li>
             <li>
               <Link href="/signup">Signup</Link>
