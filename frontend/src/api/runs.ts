@@ -1,9 +1,9 @@
 "use server";
+import Run from "@/domain/models/Run";
 import dbConnect from "../lib/mongoose";
-import Run from "../models/Run";
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export async function addRun(time: string, distance: string, token: string) {
   await dbConnect();
@@ -21,8 +21,8 @@ export async function addRun(time: string, distance: string, token: string) {
     await run.save();
     const serializedRun = {
       ...run.toObject(),
-      userId: run.userId.toString(), // Ensure _id is a string
-      _id: run._id.toString(), // Ensure _id is a string
+      userId: run.userId.toString(),
+      _id: run._id.toString(),
     };
 
     return serializedRun;
@@ -41,11 +41,10 @@ export async function fetchRuns(token: string) {
 
     const runs = await Run.find({ userId }).sort({ date: -1 });
 
-    // Convert _id to string to make it serializable
     const serializedRuns = runs.map((run) => ({
       ...run.toObject(),
-      userId: run.userId.toString(), // Ensure _id is a string
-      _id: run._id.toString(), // Ensure _id is a string
+      userId: run.userId.toString(),
+      _id: run._id.toString(),
     }));
 
     return serializedRuns;

@@ -8,8 +8,6 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Run Journal",
-  description: "Track your runs and progress",
-  generator: "v0.dev",
 };
 
 export default function RootLayout({
@@ -26,4 +24,3 @@ export default function RootLayout({
     </html>
   );
 }
-

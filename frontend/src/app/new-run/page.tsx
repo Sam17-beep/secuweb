@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { addRun } from "../api/runs";
-import AuthProtector from "../components/AuthProtector";
+import { addRun } from "@/api/runs";
+import AuthProtector from "@/domain/components/AuthProtector";
 
 function NewRunContent() {
   const [time, setTime] = useState("");

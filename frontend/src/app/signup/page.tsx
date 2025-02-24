@@ -1,10 +1,8 @@
 "use client";
 
-import type React from "react";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signup } from "../api/auth";
+import { signup } from "@/api/auth";
 
 export default function Signup() {
   const [username, setUsername] = useState("");

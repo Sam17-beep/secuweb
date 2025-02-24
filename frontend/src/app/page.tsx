@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { login } from "./api/auth";
+import { login } from "@/api/auth";
 import {
-  saveAuthToCookie,
   getAuthFromCookie,
   refreshAuthToken,
-} from "./utils/authUtils";
+  saveAuthToCookie,
+} from "@/utils/authUtils";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -17,7 +17,6 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  // Check for existing authentication on component mount
   useEffect(() => {
     const checkExistingAuth = async () => {
       const authData = getAuthFromCookie();
@@ -29,9 +28,8 @@ export default function Login() {
             router.push("/history");
             return;
           }
-        } catch (err) {
-          console.error("Auto-login failed:", err);
-          // Continue to login page if auto-login fails
+        } catch {
+          console.error("Auto-login failed:");
         }
       }
       setIsLoading(false);
@@ -47,7 +45,6 @@ export default function Login() {
       const token = await login(username, password);
       localStorage.setItem("token", token);
 
-      // Save credentials to cookie if "Remember me" is checked
       if (rememberMe) {
         saveAuthToCookie(username, password);
       }

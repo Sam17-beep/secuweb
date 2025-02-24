@@ -1,9 +1,9 @@
 "use server";
+import User from "@/domain/models/User";
 import dbConnect from "../lib/mongoose";
-import User from "../models/User";
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export async function signup(username: string, password: string) {
   await dbConnect();

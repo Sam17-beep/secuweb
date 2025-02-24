@@ -1,8 +1,8 @@
 "use client";
 
+import { fetchRuns } from "@/api/runs";
+import AuthProtector from "@/domain/components/AuthProtector";
 import { useState, useEffect } from "react";
-import { fetchRuns } from "../api/runs";
-import AuthProtector from "../components/AuthProtector";
 
 interface Run {
   _id: string;

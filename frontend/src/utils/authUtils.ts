@@ -5,14 +5,12 @@ import { login } from "../api/auth";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
-// Cookie name for storing authentication data
 const AUTH_COOKIE_NAME = "run_journal_auth";
-// Cookie expiry (30 days)
 const COOKIE_EXPIRY_DAYS = 30;
 
 interface AuthData {
   username: string;
-  hashedPassword: string; // We'll store a hashed version, not the actual password
+  hashedPassword: string;
 }
 
 interface DecodedToken {
@@ -21,9 +19,8 @@ interface DecodedToken {
 }
 
 export function saveAuthToCookie(username: string, password: string): void {
-  // Don't store actual password, use a simple hash
-  // In a production app, you'd use a more secure method
-  const hashedPassword = btoa(password); // Simple base64 encoding (not secure for production)
+  const hashedPassword = btoa(password);
+
   const authData: AuthData = { username, hashedPassword };
   Cookies.set(AUTH_COOKIE_NAME, JSON.stringify(authData), {
     expires: COOKIE_EXPIRY_DAYS,
@@ -52,7 +49,7 @@ export function isTokenExpired(token: string): boolean {
     const currentTime = Date.now() / 1000;
     return decoded.exp < currentTime;
   } catch {
-    return true; // If we can't decode the token, consider it expired
+    return true;
   }
 }
 
@@ -61,7 +58,6 @@ export async function refreshAuthToken(): Promise<string | null> {
   if (!authData) return null;
 
   try {
-    // Get password from hashed version
     const password = atob(authData.hashedPassword);
     const token = await login(authData.username, password);
     localStorage.setItem("token", token);

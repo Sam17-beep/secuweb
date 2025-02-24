@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { refreshAuthToken, isTokenExpired } from "../utils/authUtils";
+import { isTokenExpired, refreshAuthToken } from "@/utils/authUtils";
 
 interface AuthProtectorProps {
   children: React.ReactNode;
@@ -17,11 +17,9 @@ export default function AuthProtector({ children }: AuthProtectorProps) {
     const checkAuth = async () => {
       let token = localStorage.getItem("token");
 
-      // If no token or token is expired, try to refresh
       if (!token || isTokenExpired(token)) {
         token = await refreshAuthToken();
 
-        // If refresh fails, redirect to login
         if (!token) {
           router.push("/");
           return;
