@@ -1,12 +1,11 @@
 "use client";
 
-import type React from "react";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { addRun } from "../api/runs";
+import AuthProtector from "../components/AuthProtector";
 
-export default function NewRun() {
+function NewRunContent() {
   const [time, setTime] = useState("");
   const [distance, setDistance] = useState("");
   const [error, setError] = useState("");
@@ -16,12 +15,8 @@ export default function NewRun() {
     e.preventDefault();
     setError("");
     const token = localStorage.getItem("token");
-    if (!token) {
-      setError("You must be logged in to add a run");
-      return;
-    }
     try {
-      await addRun(time, distance, token);
+      await addRun(time, distance, token as string);
       router.push("/history");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to add new run");
@@ -68,5 +63,13 @@ export default function NewRun() {
         Add Run
       </button>
     </form>
+  );
+}
+
+export default function NewRun() {
+  return (
+    <AuthProtector>
+      <NewRunContent />
+    </AuthProtector>
   );
 }
