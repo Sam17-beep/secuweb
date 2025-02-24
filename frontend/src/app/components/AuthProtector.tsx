@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { refreshAuthToken, isTokenExpired } from "../utils/authUtils";
 
 interface AuthProtectorProps {
   children: React.ReactNode;
@@ -13,17 +14,25 @@ export default function AuthProtector({ children }: AuthProtectorProps) {
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    console.log("Checking for token...");
-    console.log("Token found:", token);
-    if (!token) {
-      console.log("No token found, redirecting to login");
-      router.push("/");
-    } else {
-      console.log("Token found, user is authenticated");
+    const checkAuth = async () => {
+      let token = localStorage.getItem("token");
+
+      // If no token or token is expired, try to refresh
+      if (!token || isTokenExpired(token)) {
+        token = await refreshAuthToken();
+
+        // If refresh fails, redirect to login
+        if (!token) {
+          router.push("/");
+          return;
+        }
+      }
+
       setIsAuthenticated(true);
-    }
-    setIsLoading(false);
+      setIsLoading(false);
+    };
+
+    checkAuth();
   }, [router]);
 
   if (isLoading) {

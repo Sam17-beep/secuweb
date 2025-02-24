@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import { removeAuthCookie } from "../utils/authUtils";
 
 export default function Navigation() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -18,6 +19,7 @@ export default function Navigation() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    removeAuthCookie();
     setIsAuthenticated(false);
     router.push("/");
   };
@@ -33,9 +35,6 @@ export default function Navigation() {
   return (
     <nav className="bg-gray-800 text-white p-4">
       <ul className="flex space-x-4">
-        <li>
-          <Link href="/">Home</Link>
-        </li>
         {!isAuthenticated ? (
           <>
             <li>

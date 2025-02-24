@@ -1,16 +1,44 @@
 "use client";
 
-import type React from "react";
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { login } from "./api/auth";
+import {
+  saveAuthToCookie,
+  getAuthFromCookie,
+  refreshAuthToken,
+} from "./utils/authUtils";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+
+  // Check for existing authentication on component mount
+  useEffect(() => {
+    const checkExistingAuth = async () => {
+      const authData = getAuthFromCookie();
+      if (authData) {
+        try {
+          setIsLoading(true);
+          const token = await refreshAuthToken();
+          if (token) {
+            router.push("/history");
+            return;
+          }
+        } catch (err) {
+          console.error("Auto-login failed:", err);
+          // Continue to login page if auto-login fails
+        }
+      }
+      setIsLoading(false);
+    };
+
+    checkExistingAuth();
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,11 +46,25 @@ export default function Login() {
     try {
       const token = await login(username, password);
       localStorage.setItem("token", token);
+
+      // Save credentials to cookie if "Remember me" is checked
+      if (rememberMe) {
+        saveAuthToCookie(username, password);
+      }
+
       router.push("/history");
     } catch {
       setError("Login failed. Please check your credentials.");
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <p>Checking authentication...</p>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="max-w-sm mx-auto">
@@ -53,6 +95,17 @@ export default function Login() {
           className="w-full px-3 py-2 border rounded"
           required
         />
+      </div>
+      <div className="mb-4">
+        <label className="flex items-center">
+          <input
+            type="checkbox"
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.target.checked)}
+            className="mr-2"
+          />
+          <span>Remember me</span>
+        </label>
       </div>
       <button
         type="submit"
