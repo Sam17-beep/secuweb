@@ -20,7 +20,6 @@ function NewRunContent() {
       router.push("/history");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to add new run");
-      console.error("Error details:", err);
     }
   };
 
@@ -34,6 +33,7 @@ function NewRunContent() {
         </label>
         <input
           type="number"
+          min={0}
           step="0.01"
           id="time"
           value={time}
@@ -49,6 +49,7 @@ function NewRunContent() {
         <input
           type="number"
           step="0.01"
+          min={0}
           id="distance"
           value={distance}
           onChange={(e) => setDistance(e.target.value)}
