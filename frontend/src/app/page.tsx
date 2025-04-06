@@ -65,8 +65,7 @@ export default function Login() {
       }
 
       router.push("/history");
-    } catch (error) {
-      console.error("Login error:", error);
+    } catch {
       setError("Login failed. Please check your credentials.");
     }
   };
