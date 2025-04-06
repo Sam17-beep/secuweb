@@ -16,15 +16,18 @@ export async function POST(request: Request) {
     // Find the user by username
     const user = await User.findOne({ username });
     if (!user) {
-      return NextResponse.json({ message: "User not found" }, { status: 404 });
+      return NextResponse.json(
+        { message: "Check your credentials" },
+        { status: 400 },
+      );
     }
 
     // Validate the password
     const isValid = await user.validatePassword(password);
     if (!isValid) {
       return NextResponse.json(
-        { message: "Invalid password" },
-        { status: 400 },
+        { message: "Check your credentials" },
+        { status: 401 },
       );
     }
 
