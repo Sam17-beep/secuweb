@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signup } from "@/api/auth";
 
 export default function Signup() {
   const [username, setUsername] = useState("");
@@ -12,12 +11,24 @@ export default function Signup() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
     try {
-      await signup(username, password);
-      router.push("/");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Signup failed");
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (res.ok) {
+        setError("User created successfully!");
+        router.push("/");
+      } else {
+        setError("This username already exists.");
+      }
+    } catch (error) {
+      console.error("An unexpected error occurred:", error);
+      setError("An unexpected error occurred.");
     }
   };
 

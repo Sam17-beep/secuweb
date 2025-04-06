@@ -1,6 +1,5 @@
 "use client";
 
-import { login } from "@/api/auth";
 import {
   getAuthFromCookie,
   refreshAuthToken,
@@ -41,8 +40,24 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
     try {
-      const token = await login(username, password);
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (!res.ok) {
+        // Extract and throw error message if available
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Login failed");
+      }
+
+      // If login is successful, extract the token
+      const { token } = await res.json();
       localStorage.setItem("token", token);
 
       if (rememberMe) {
@@ -50,7 +65,8 @@ export default function Login() {
       }
 
       router.push("/history");
-    } catch {
+    } catch (error) {
+      console.error("Login error:", error);
       setError("Login failed. Please check your credentials.");
     }
   };
