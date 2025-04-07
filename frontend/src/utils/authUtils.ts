@@ -24,6 +24,7 @@ export function saveAuthToCookie(username: string, password: string): void {
   const authData: AuthData = { username, hashedPassword };
   Cookies.set(AUTH_COOKIE_NAME, JSON.stringify(authData), {
     expires: COOKIE_EXPIRY_DAYS,
+    httpOnly: true,
   });
 }
 
