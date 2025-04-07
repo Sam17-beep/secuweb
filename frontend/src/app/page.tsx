@@ -125,7 +125,7 @@ export default function Login() {
       <button
         disabled={isPending}
         type="submit"
-        className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 disabled:opacity-50"
+        className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-blue-400"
       >
         Login
       </button>
