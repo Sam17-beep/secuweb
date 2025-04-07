@@ -14,6 +14,7 @@ export default function Login() {
   const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [isPending, setIsPending] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -40,6 +41,7 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setIsPending(true);
 
     try {
       const res = await fetch("/api/login", {
@@ -67,6 +69,7 @@ export default function Login() {
       router.push("/history");
     } catch {
       setError("Login failed. Please check your credentials.");
+      setIsPending(false);
     }
   };
 
@@ -120,8 +123,9 @@ export default function Login() {
         </label>
       </div>
       <button
+        disabled={isPending}
         type="submit"
-        className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+        className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 disabled:opacity-50"
       >
         Login
       </button>
