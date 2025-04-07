@@ -56,7 +56,7 @@ export async function POST(request: Request) {
       loginAttempts[ip].count += 1;
       return NextResponse.json(
         { message: "Check your credentials" },
-        { status: 401 },
+        { status: 400 },
       );
     }
 
@@ -67,7 +67,7 @@ export async function POST(request: Request) {
       loginAttempts[ip].count += 1;
       return NextResponse.json(
         { message: "Check your credentials" },
-        { status: 401 },
+        { status: 400 },
       );
     }
 
