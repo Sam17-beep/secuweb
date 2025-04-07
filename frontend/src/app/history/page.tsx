@@ -17,7 +17,7 @@ function HistoryContent() {
 
   useEffect(() => {
     const getRuns = async () => {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       try {
         const data = await fetchRuns(token as string);
         setRuns(data as unknown as Run[]);

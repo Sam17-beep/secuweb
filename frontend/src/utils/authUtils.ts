@@ -60,7 +60,7 @@ export async function refreshAuthToken(): Promise<string | null> {
   try {
     const password = atob(authData.hashedPassword);
     const token = await login(authData.username, password);
-    localStorage.setItem("token", token);
+    sessionStorage.setItem("token", token);
     return token;
   } catch (e) {
     console.error("Error refreshing token:", e);

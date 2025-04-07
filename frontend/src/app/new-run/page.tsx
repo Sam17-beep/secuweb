@@ -14,7 +14,7 @@ function NewRunContent() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     try {
       await addRun(time, distance, token as string);
       router.push("/history");

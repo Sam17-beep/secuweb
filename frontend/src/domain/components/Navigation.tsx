@@ -12,13 +12,13 @@ export default function Navigation() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     setIsAuthenticated(!!token);
     setIsLoading(false);
   }, [pathname]);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
     removeAuthCookie();
     setIsAuthenticated(false);
     router.push("/");

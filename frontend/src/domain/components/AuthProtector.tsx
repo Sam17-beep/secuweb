@@ -15,7 +15,7 @@ export default function AuthProtector({ children }: AuthProtectorProps) {
 
   useEffect(() => {
     const checkAuth = async () => {
-      let token = localStorage.getItem("token");
+      let token = sessionStorage.getItem("token");
 
       if (!token || isTokenExpired(token)) {
         token = await refreshAuthToken();

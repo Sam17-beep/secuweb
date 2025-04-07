@@ -58,7 +58,7 @@ export default function Login() {
 
       // If login is successful, extract the token
       const { token } = await res.json();
-      localStorage.setItem("token", token);
+      sessionStorage.setItem("token", token);
 
       if (rememberMe) {
         saveAuthToCookie(username, password);
